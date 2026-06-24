@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard · Fuel Management</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <!-- Chart.js for Phase 3 charts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body class="dashboard-page">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 8H28C29.1 8 30 8.9 30 10V40H12V10C12 8.9 12.9 8 14 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M30 18H33C34.6569 18 36 19.3431 36 21V32C36 33.1046 36.8954 34 38 34C39.1046 34 40 33.1046 40 32V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M36 21V16L40 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="16" y1="16" x2="26" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="16" y1="22" x2="26" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="9" y1="40" x2="33" y2="40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Fuel Ledger</span>
+    </div>
+
+    <nav class="topbar-nav">
+      <a href="dashboard.html" class="nav-link active">Dashboard</a>
+      <a href="slip-upload.html" class="nav-link">Slip Upload</a>
+      <a href="search-filter.html" class="nav-link">Search & Filter</a>
+    </nav>
+
+    <div class="topbar-user">
+      <span id="whoami" class="user-chip"></span>
+      <button id="logoutBtn" class="btn-logout">Logout</button>
+    </div>
+  </div>
+
+  <main class="dash-main">
+
+    <!-- Page header -->
+    <div class="dash-header">
+      <div>
+        <p class="page-eyebrow">Fleet Operations</p>
+        <h1>Fuel Dashboard</h1>
+      </div>
+      <a href="slip-upload.html" class="btn-add-slip">+ New Slip</a>
+    </div>
+
+    <!-- Stats cards -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card">
+        <span class="stat-icon">📋</span>
+        <div>
+          <p class="stat-label">This Month Entries</p>
+          <p class="stat-val" id="s_monthEntries">—</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">⛽</span>
+        <div>
+          <p class="stat-label">This Month Liters</p>
+          <p class="stat-val" id="s_monthLiters">—</p>
+        </div>
+      </div>
+      <div class="stat-card highlight">
+        <span class="stat-icon">💰</span>
+        <div>
+          <p class="stat-label">This Month Amount</p>
+          <p class="stat-val amber" id="s_monthAmount">—</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🚗</span>
+        <div>
+          <p class="stat-label">Total Entries</p>
+          <p class="stat-val" id="s_total">—</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts row -->
+    <div class="charts-grid" id="chartsGrid" style="display:none">
+      <div class="chart-card">
+        <h3 class="chart-title">Monthly Expense (Rs.)</h3>
+        <canvas id="monthlyChart" height="200"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Top Vehicles by Amount</h3>
+        <canvas id="vehicleChart" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- Add entry form -->
+    <div class="form-card">
+      <h2 class="form-card-title">⛽ New Fuel Entry</h2>
+      <div class="entry-form-grid">
+        <input type="text"   id="vehicle" class="dash-input" placeholder="Vehicle Number">
+        <input type="number" id="liters"  class="dash-input" placeholder="Liters">
+        <input type="number" id="amount"  class="dash-input" placeholder="Amount (Rs.)">
+        <button onclick="saveData()" class="btn-save-entry">Save Entry</button>
+      </div>
+      <p id="formMessage" class="form-message"></p>
+    </div>
+
+    <!-- Entries list -->
+    <div class="entries-section">
+      <div class="entries-header">
+        <h2>📋 Recent Entries</h2>
+        <a href="search-filter.html" class="view-all-link">View All / Filter →</a>
+      </div>
+      <div id="list"></div>
+    </div>
+
+  </main>
+
+  <script src="fuel-app.js"></script>
+</body>
+</html>

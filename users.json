@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "salt": "64610b7aa0b264f003519ba7488ea8b9",
+    "passwordHash": "d176367013bf931eee78932d204f6cac4f83f313ff9fda27cdcd5b064074d48d2bf68eb11e3e954e5208e5d5f6e42e2c4c82e5f511b200a6f2227ab612026ce1",
+    "role": "admin",
+    "name": "Office Admin"
+  },
+  {
+    "id": 2,
+    "username": "accountant",
+    "salt": "6eb3182860e31a163f48d4bca4ae9ce4",
+    "passwordHash": "690bed1738b34b0a90725c61ff7de2e0d0a879a56dafb6afb63efd55729fdab5ed4393ae8483c4daabc7be66478a1bddc650b8291eaab9be2a33e74214d74af5",
+    "role": "accountant",
+    "name": "Accountant"
+  }
+]

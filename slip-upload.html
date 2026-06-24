@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slip Upload · Fuel Management</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="slip-upload.css">
+</head>
+<body class="upload-page">
+
+  <!-- Top bar (same pattern as dashboard) -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 8H28C29.1 8 30 8.9 30 10V40H12V10C12 8.9 12.9 8 14 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M30 18H33C34.6569 18 36 19.3431 36 21V32C36 33.1046 36.8954 34 38 34C39.1046 34 40 33.1046 40 32V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M36 21V16L40 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="16" y1="16" x2="26" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="16" y1="22" x2="26" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="9" y1="40" x2="33" y2="40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Fuel Ledger</span>
+    </div>
+
+    <nav class="topbar-nav">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="slip-upload.html" class="nav-link active">Slip Upload</a>
+      <a href="search-filter.html" class="nav-link">Search & Filter</a>
+      <a href="reports.html" class="nav-link">Reports</a>
+    </nav>
+
+    <div class="topbar-user">
+      <span id="whoami" class="user-chip"></span>
+      <button id="logoutBtn" class="btn-logout">Logout</button>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <main class="upload-main">
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <p class="page-eyebrow">Phase 2 · OCR</p>
+        <h1>Upload Fuel Slip</h1>
+        <p class="page-sub">Slip ki photo upload karein — system khud vehicle, liters aur amount parh kar form fill kar dega.</p>
+      </div>
+      <div class="page-header-badge">
+        <span class="badge-icon">📷</span>
+        <span>AI Auto-Read</span>
+      </div>
+    </div>
+
+    <!-- Two-column layout -->
+    <div class="upload-grid">
+
+      <!-- LEFT: Upload zone -->
+      <section class="upload-card">
+        <h2 class="card-title">Slip Image</h2>
+
+        <!-- Drop zone -->
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-icon">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="14" width="48" height="36" rx="4" stroke="currentColor" stroke-width="2"/>
+              <circle cx="22" cy="26" r="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 38L20 28L28 36L38 26L56 40" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M32 6V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M27 11L32 6L37 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <p class="drop-title">Slip yahan drag karein</p>
+          <p class="drop-sub">ya niche se file choose karein</p>
+          <div class="drop-actions">
+            <label class="btn-file" for="fileInput">
+              📁 File Choose
+              <input type="file" id="fileInput" accept="image/*" hidden>
+            </label>
+            <button type="button" class="btn-camera" id="cameraBtn">📷 Camera</button>
+          </div>
+          <p class="drop-hint">JPG, PNG, WEBP • Max 10 MB</p>
+        </div>
+
+        <!-- Preview (hidden until image chosen) -->
+        <div class="preview-area" id="previewArea" style="display:none">
+          <div class="preview-header">
+            <span class="preview-label">Selected Slip</span>
+            <button type="button" class="btn-remove" id="removeImg">✕ Remove</button>
+          </div>
+          <img id="previewImg" src="" alt="Slip preview" class="preview-img">
+        </div>
+
+        <!-- Camera capture (hidden by default) -->
+        <div class="camera-area" id="cameraArea" style="display:none">
+          <video id="cameraVideo" autoplay playsinline class="camera-video"></video>
+          <div class="camera-controls">
+            <button type="button" class="btn-capture" id="captureBtn">📸 Capture</button>
+            <button type="button" class="btn-cancel-cam" id="cancelCameraBtn">Cancel</button>
+          </div>
+          <canvas id="captureCanvas" style="display:none"></canvas>
+        </div>
+
+        <!-- OCR trigger -->
+        <button type="button" class="btn-ocr" id="ocrBtn" disabled>
+          <span class="btn-ocr-icon">🔍</span>
+          <span class="btn-ocr-text">Read Slip Details</span>
+        </button>
+
+        <!-- OCR status -->
+        <div class="ocr-status" id="ocrStatus" style="display:none">
+          <div class="ocr-spinner"></div>
+          <span id="ocrStatusText">AI slip parh raha hai...</span>
+        </div>
+      </section>
+
+      <!-- RIGHT: Auto-filled form -->
+      <section class="form-card">
+        <div class="form-card-header">
+          <h2 class="card-title">Entry Details</h2>
+          <span class="auto-badge" id="autoBadge" style="display:none">✨ Auto-filled</span>
+        </div>
+
+        <p class="form-card-hint">Slip read hone ke baad fields apne aap fill ho jayenge. Zaroorat ho to edit kar sakte hain.</p>
+
+        <div class="entry-form" id="entryForm">
+
+          <div class="form-row">
+            <label class="field-label" for="f_vehicle">Vehicle Number</label>
+            <input type="text" id="f_vehicle" class="field-input" placeholder="e.g. ABC-123" autocomplete="off">
+          </div>
+
+          <div class="form-row two-col">
+            <div>
+              <label class="field-label" for="f_liters">Liters</label>
+              <input type="number" id="f_liters" class="field-input" placeholder="0.00" step="0.01" min="0">
+            </div>
+            <div>
+              <label class="field-label" for="f_amount">Amount (Rs.)</label>
+              <input type="number" id="f_amount" class="field-input" placeholder="0" min="0">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="field-label" for="f_driver">Driver Name <span class="optional">(optional)</span></label>
+            <input type="text" id="f_driver" class="field-input" placeholder="e.g. Muhammad Ali" autocomplete="off">
+          </div>
+
+          <div class="form-row">
+            <label class="field-label" for="f_date">Date</label>
+            <input type="date" id="f_date" class="field-input">
+          </div>
+
+          <div class="form-row">
+            <label class="field-label" for="f_notes">Notes <span class="optional">(optional)</span></label>
+            <textarea id="f_notes" class="field-input field-textarea" placeholder="Koi extra note..."></textarea>
+          </div>
+
+          <!-- Confidence indicators (shown after OCR) -->
+          <div class="confidence-row" id="confidenceRow" style="display:none">
+            <p class="confidence-title">OCR Confidence</p>
+            <div class="confidence-items" id="confidenceItems"></div>
+          </div>
+
+          <p class="form-message" id="formMessage"></p>
+
+          <div class="form-actions">
+            <button type="button" class="btn-clear" id="clearBtn">Clear</button>
+            <button type="button" class="btn-save" id="saveBtn">Save Entry</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Recent slips section -->
+    <section class="recent-section">
+      <div class="recent-header">
+        <h2>Recent Entries</h2>
+        <a href="dashboard.html" class="view-all-link">View All →</a>
+      </div>
+      <div id="recentList" class="recent-list">
+        <p class="empty-state">Koi entry nahi mili abhi tak.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="slip-upload.js"></script>
+</body>
+</html>

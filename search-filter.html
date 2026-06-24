@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search & Filter · Fuel Management</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="search-filter.css">
+</head>
+<body class="filter-page">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 8H28C29.1 8 30 8.9 30 10V40H12V10C12 8.9 12.9 8 14 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M30 18H33C34.6569 18 36 19.3431 36 21V32C36 33.1046 36.8954 34 38 34C39.1046 34 40 33.1046 40 32V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M36 21V16L40 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="16" y1="16" x2="26" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="16" y1="22" x2="26" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="9" y1="40" x2="33" y2="40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Fuel Ledger</span>
+    </div>
+
+    <nav class="topbar-nav">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="slip-upload.html" class="nav-link">Slip Upload</a>
+      <a href="search-filter.html" class="nav-link active">Search & Filter</a>
+      <a href="reports.html" class="nav-link">Reports</a>
+    </nav>
+
+    <div class="topbar-user">
+      <span id="whoami" class="user-chip"></span>
+      <button id="logoutBtn" class="btn-logout">Logout</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <main class="filter-main">
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <p class="page-eyebrow">Phase 3 · Search</p>
+        <h1>Search & Filter Entries</h1>
+        <p class="page-sub">Vehicle, driver ya date ke hisaab se entries dhundein aur filter karein.</p>
+      </div>
+      <div id="resultsBadge" class="page-header-badge" style="display:none">
+        <span class="badge-icon">📋</span>
+        <span id="resultsCount">0 entries</span>
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-card">
+      <div class="filter-grid">
+
+        <div class="filter-field">
+          <label class="filter-label" for="f_search">🔍 Search</label>
+          <input type="text" id="f_search" class="filter-input" placeholder="Vehicle, driver, pump name...">
+        </div>
+
+        <div class="filter-field">
+          <label class="filter-label" for="f_vehicle">🚗 Vehicle Number</label>
+          <input type="text" id="f_vehicle" class="filter-input" placeholder="e.g. LHR-123">
+        </div>
+
+        <div class="filter-field">
+          <label class="filter-label" for="f_driver">👤 Driver</label>
+          <input type="text" id="f_driver" class="filter-input" placeholder="Driver ka naam">
+        </div>
+
+        <div class="filter-field">
+          <label class="filter-label" for="f_month">📅 Month</label>
+          <input type="month" id="f_month" class="filter-input">
+        </div>
+
+        <div class="filter-field">
+          <label class="filter-label" for="f_dateFrom">📆 Date From</label>
+          <input type="date" id="f_dateFrom" class="filter-input">
+        </div>
+
+        <div class="filter-field">
+          <label class="filter-label" for="f_dateTo">📆 Date To</label>
+          <input type="date" id="f_dateTo" class="filter-input">
+        </div>
+
+      </div>
+
+      <div class="filter-actions">
+        <button id="searchBtn" class="btn-search">🔍 Search Karein</button>
+        <button id="clearBtn" class="btn-clear-filter">✕ Clear</button>
+      </div>
+    </div>
+
+    <!-- Summary bar (shown after search) -->
+    <div class="summary-bar" id="summaryBar" style="display:none">
+      <div class="summary-item">
+        <span class="summary-label">Total Entries</span>
+        <span class="summary-val" id="sum_count">0</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-item">
+        <span class="summary-label">Total Liters</span>
+        <span class="summary-val" id="sum_liters">0 L</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-item">
+        <span class="summary-label">Total Amount</span>
+        <span class="summary-val amber" id="sum_amount">Rs. 0</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-item">
+        <span class="summary-label">Avg per Entry</span>
+        <span class="summary-val" id="sum_avg">Rs. 0</span>
+      </div>
+    </div>
+
+    <!-- Results table -->
+    <div class="results-section" id="resultsSection" style="display:none">
+      <div class="results-header">
+        <h2>Results</h2>
+        <div class="sort-row">
+          <label class="filter-label" for="sortBy">Sort by:</label>
+          <select id="sortBy" class="sort-select">
+            <option value="date-desc">Date (Newest)</option>
+            <option value="date-asc">Date (Oldest)</option>
+            <option value="amount-desc">Amount (High → Low)</option>
+            <option value="amount-asc">Amount (Low → High)</option>
+            <option value="liters-desc">Liters (High → Low)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="entries-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Vehicle</th>
+              <th>Driver</th>
+              <th>Pump</th>
+              <th>Liters</th>
+              <th>Amount</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+          </tbody>
+        </table>
+      </div>
+
+      <p class="empty-state" id="emptyState" style="display:none">
+        Koi entry nahi mili. Filter change karke dobara koshish karein.
+      </p>
+    </div>
+
+  </main>
+
+  <script src="search-filter.js"></script>
+</body>
+</html>

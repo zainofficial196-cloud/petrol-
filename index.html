@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login · Fuel Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="scene">
+    <div class="panel">
+
+      <div class="brand-rail">
+        <div class="rail-mark">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 8H28C29.1 8 30 8.9 30 10V40H12V10C12 8.9 12.9 8 14 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M30 18H33C34.6569 18 36 19.3431 36 21V32C36 33.1046 36.8954 34 38 34C39.1046 34 40 33.1046 40 32V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M36 21V16L40 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="16" y1="16" x2="26" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="16" y1="22" x2="26" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="9" y1="40" x2="33" y2="40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <p class="rail-eyebrow">Fleet Operations</p>
+        <h1 class="rail-title">Fuel Expense<br>&amp; Slip Ledger</h1>
+        <p class="rail-sub">Every slip scanned, every liter accounted for, every vehicle on record.</p>
+
+        <ul class="rail-stats">
+          <li><span class="stat-num">01</span><span class="stat-label">Upload the slip</span></li>
+          <li><span class="stat-num">02</span><span class="stat-label">OCR reads the details</span></li>
+          <li><span class="stat-num">03</span><span class="stat-label">Report writes itself</span></li>
+        </ul>
+      </div>
+
+      <div class="form-side">
+        <form class="login-box" id="loginForm" novalidate>
+          <span class="form-eyebrow">Admin Access</span>
+          <h2>Sign in to continue</h2>
+          <p class="form-hint">Use your office credentials to open the dashboard.</p>
+
+          <label class="field">
+            <span class="field-label">Username</span>
+            <input type="text" id="user" name="user" placeholder="e.g. admin.office" autocomplete="username" required>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Password</span>
+            <div class="pass-wrap">
+              <input type="password" id="pass" name="pass" placeholder="Enter your password" autocomplete="current-password" required>
+              <button type="button" class="toggle-pass" id="togglePass" aria-label="Show password">
+                <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 12C2 12 5.5 5 12 5C18.5 5 22 12 22 12C22 12 18.5 19 12 19C5.5 19 2 12 2 12Z" stroke="currentColor" stroke-width="1.6"/>
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/>
+                </svg>
+              </button>
+            </div>
+          </label>
+
+          <div class="row-between">
+            <label class="remember">
+              <input type="checkbox" id="remember">
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-link">Forgot password?</a>
+          </div>
+
+          <p class="form-error" id="formError" role="alert" aria-live="polite"></p>
+
+          <button type="submit" class="btn-login" id="loginBtn">
+            <span class="btn-text">Login</span>
+          </button>
+
+          <p class="form-footer">Driver or accountant? Ask your admin for an invite.</p>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
